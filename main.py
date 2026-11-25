@@ -33,6 +33,10 @@ def main():
     text = ENTRY
     if not (1 <= len(text) <= MAX_CHARS) or not text.strip():
         raise SystemExit("entry must be 1-200 non-blank characters")
+    if any(ord(ch) < 0x20 or ch == "\x7f" for ch in text):
+        raise SystemExit("entry must contain no control characters")
+    if "\n" in text or "\r" in text:
+        raise SystemExit("entry must be a single line")
     path = output_path()
     with open(path, "w", encoding="utf-8", newline="") as handle:
         handle.write(text)
